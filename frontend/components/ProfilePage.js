@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+} from '@chakra-ui/react';
 
 const completePayment = async (userDetails, paymentDetails) => {
   console.log(`Completing payment for user: ${userDetails.name}`);
@@ -14,16 +23,17 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
-    selectedBatch: '', 
+    selectedBatch: '',
     mobile: '',
-    paymentStatus: 'Pending', 
+    editStatus: '',
+    paymentStatus: 'Pending',
   });
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     const fetchFormData = async () => {
       try {
-        const response = await fetch('/api/getFormData'); 
+        const response = await fetch('/api/getFormData');
         if (response.ok) {
           const data = await response.json();
           setFormData(data);
@@ -53,7 +63,7 @@ const ProfilePage = () => {
   };
 
   const handleSaveClick = async () => {
-    console.log('Changes saved'); 
+    console.log('Changes saved');
 
     if (formData.selectedBatch !== formData.currentBatch) {
       scheduleBatchChange(formData.selectedBatch);
@@ -62,7 +72,7 @@ const ProfilePage = () => {
     setEditMode(false);
 
     if (formData.paymentStatus === 'Pending') {
-      await completePayment(formData, /* additional payment details if needed */);
+      await completePayment(formData /* additional payment details if needed */);
       setFormData({ ...formData, paymentStatus: 'Completed' });
     }
   };
@@ -71,32 +81,34 @@ const ProfilePage = () => {
     console.log(`Scheduling batch change for next month: ${newBatch}`);
   };
 
- // ...
-
-const handlePaymentStatusToggle = async () => {
-  if (formData.paymentStatus === 'Completed') {
-    console.log('Payment is already completed.');
-    return; 
-  }
-
-  const newPaymentStatus = formData.paymentStatus === 'Pending' ? 'Completed' : 'Pending';
-
-  setFormData({ ...formData, paymentStatus: newPaymentStatus });
-
-  if (newPaymentStatus === 'Completed') {
-    try {
-      await completePayment(formData /* additional payment details if needed */);
-      console.log('Payment completed successfully.');
-    } catch (error) {
-      console.error('Error completing payment:', error);
+  const handlePaymentStatusToggle = async () => {
+    if (formData.paymentStatus === 'Completed') {
+      console.log('Payment is already completed.');
+      return;
     }
-  }
-};
 
+    const newPaymentStatus =
+      formData.paymentStatus === 'Pending' ? 'Completed' : 'Pending';
+
+    setFormData({ ...formData, paymentStatus: newPaymentStatus });
+
+    if (newPaymentStatus === 'Completed') {
+      try {
+        await completePayment(
+          formData /* additional payment details if needed */
+        );
+        console.log('Payment completed successfully.');
+      } catch (error) {
+        console.error('Error completing payment:', error);
+      }
+    }
+  };
 
   return (
-    <div>
-      <h2>Yoga Registration</h2>
+    <Box maxW="md" mx="auto" mt={8} p={4} borderWidth={1} borderRadius={8}>
+      <Text fontSize="xl" mb={4} textAlign="center">
+        Yoga Registration
+      </Text>
       <ProfileInfo formData={formData} />
       <PaymentStatus
         paymentStatus={formData.paymentStatus}
@@ -108,36 +120,48 @@ const handlePaymentStatusToggle = async () => {
         onBatchChange={handleBatchChange}
       />
       {editMode ? (
-        <button onClick={handleSaveClick}>Save</button>
+        <Button colorScheme="teal" onClick={handleSaveClick} mt={4}>
+          Save
+        </Button>
       ) : (
-        <button onClick={handleEditClick}>Edit</button>
+        <Button colorScheme="blue" onClick={handleEditClick} mt={4}>
+          Edit
+        </Button>
       )}
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+      <Button colorScheme="red" onClick={handleLogout} mt={4}>
+        Logout
+      </Button>
+    </Box>
   );
 };
 
 const ProfileInfo = ({ formData }) => {
-  const { name, age, selectedBatch, currentBatch, mobile } = formData;
+  const { name, age, mobile, selectedBatch, currentBatch } = formData;
 
   return (
-    <div>
-      <h3>Welcome to your profile</h3>
-      <p>Name: {formData.name}</p>
-      <p>Age: {formData.age}</p>
-      <p>Mobile: {formData.mobile}</p>
-      <p>Current Batch : {formData.selected_batch}</p>
-    </div>
+    <Box>
+      <Text fontSize="lg" fontWeight="bold" mb={2}>
+        Welcome to your profile
+      </Text>
+      <Text>Name: {name}</Text>
+      <Text>Age: {age}</Text>
+      <Text>Mobile: {mobile}</Text>
+      <Text>Current Batch: {currentBatch}</Text>
+    </Box>
   );
 };
 
 const PaymentStatus = ({ paymentStatus, onToggle }) => {
   return (
-    <div>
-      <h3>Payment Status</h3>
-      <p>Status: {paymentStatus}</p>
-      <button onClick={onToggle}>Toggle Payment Status</button>
-    </div>
+    <Box mt={4}>
+      <Text fontSize="lg" fontWeight="bold" mb={2}>
+        Payment Status
+      </Text>
+      <Text>Status: {paymentStatus}</Text>
+      <Button colorScheme="purple" onClick={onToggle} mt={2}>
+        Toggle Payment Status
+      </Button>
+    </Box>
   );
 };
 
@@ -150,21 +174,27 @@ const YogaBatches = ({ editMode, selectedBatch, onBatchChange }) => {
   ];
 
   return (
-    <div>
-      <h3>Yoga Batches</h3>
+    <Box mt={4}>
+      <Text fontSize="lg" fontWeight="bold" mb={2}>
+        Yoga Batches
+      </Text>
       {editMode && (
-        <div>
-          <label htmlFor="batchSelect">Select Batch for Next Month:</label>
-          <select id="batchSelect" value={selectedBatch} onChange={onBatchChange}>
+        <FormControl>
+          <FormLabel>Select Batch for Next Month:</FormLabel>
+          <Select
+            id="batchSelect"
+            value={selectedBatch}
+            onChange={onBatchChange}
+          >
             {yogaBatches.map((batch, index) => (
               <option key={index} value={batch.time}>
                 {batch.time}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormControl>
       )}
-    </div>
+    </Box>
   );
 };
 

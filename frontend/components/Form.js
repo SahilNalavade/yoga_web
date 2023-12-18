@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 
 const Form = () => {
   const router = useRouter();
@@ -66,49 +76,61 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <h2>Yoga Class Admission Form</h2>
+    <Box maxW="md" mx="auto" mt={8} p={4} borderWidth={1} borderRadius={8}>
+      <Text fontSize="xl" mb={4} textAlign="center">
+        Yoga Class Admission Form
+      </Text>
       <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
-        </label>
-        <br />
-        <label>
-          Age:
-          <input type="number" name="age" value={formData.age} onChange={handleInputChange} />
-        </label>
-        <br />
-        <label>
-          Mobile:
-          <input
-            type="text"
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Preferred Batch:
-          <select
-            name="selectedBatch"
-            value={formData.selectedBatch}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Batch</option>
-            <option value="6-7AM">6-7AM</option>
-            <option value="7-8AM">7-8AM</option>
-            <option value="8-9AM">8-9AM</option>
-            <option value="5-6PM">5-6PM</option>
-          </select>
-        </label>
-        <br />
-        <button type="submit">Submit</button>
+        <Stack spacing={4}>
+          <FormControl>
+            <FormLabel>Name</FormLabel>
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Age</FormLabel>
+            <Input
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Mobile</FormLabel>
+            <Input
+              type="text"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Preferred Batch</FormLabel>
+            <Select
+              name="selectedBatch"
+              value={formData.selectedBatch}
+              onChange={handleInputChange}
+            >
+              <option value="">Select Batch</option>
+              <option value="6-7AM">6-7AM</option>
+              <option value="7-8AM">7-8AM</option>
+              <option value="8-9AM">8-9AM</option>
+              <option value="5-6PM">5-6PM</option>
+            </Select>
+          </FormControl>
+          <Button colorScheme="teal" type="submit">
+            Submit
+          </Button>
+        </Stack>
       </form>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+      {error && <Text color="red.500">{error}</Text>}
+    </Box>
   );
 };
 

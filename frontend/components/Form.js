@@ -7,6 +7,7 @@ const Form = () => {
     name: '',
     age: '',
     selectedBatch: '',
+    mobile: '',
   });
   const [error, setError] = useState('');
 
@@ -20,41 +21,47 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { name, age, selectedBatch } = formData;
+    const { name, age, selectedBatch, mobile } = formData;
 
-    if (!name || !age || !selectedBatch) {
+    // Basic validations
+    if (!name.trim() || !age.trim() || !selectedBatch.trim() || !mobile.trim()) {
       setError('Please fill in all the fields.');
       return;
     }
 
     const ageValue = parseInt(age);
-    if (isNaN(ageValue) || ageValue < 18) {
-      setError('Age should be 18 or above.');
-    } else if (ageValue > 65) {
-      setError('Age should be 65 or below.');
-    } else {
-      try {
-        const response = await fetch('/api/submitForm', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
+    if (isNaN(ageValue) || ageValue < 18 || ageValue > 65) {
+      setError('Age should be between 18 and 65.');
+      return;
+    }
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log('Form submitted successfully:', responseData);
+    const mobileRegex = /^[0-9]{10}$/; // Simple 10-digit mobile number validation
+    if (!mobile.match(mobileRegex)) {
+      setError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
 
-          router.push('/profile');
-        } else {
-          console.error('Failed to submit form:', response.status);
-        }
-      } catch (error) {
-        console.error('Error during form submission:', error);
-      } finally {
-        setError('');
+    try {
+      const response = await fetch('/api/submitForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Form submitted successfully:', responseData);
+
+        router.push('/profile');
+      } else {
+        console.error('Failed to submit form:', response.status);
       }
+    } catch (error) {
+      console.error('Error during form submission:', error);
+    } finally {
+      setError('');
     }
   };
 
@@ -73,8 +80,22 @@ const Form = () => {
         </label>
         <br />
         <label>
+          Mobile:
+          <input
+            type="text"
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleInputChange}
+          />
+        </label>
+        <br />
+        <label>
           Preferred Batch:
-          <select name="selectedBatch" value={formData.selectedBatch} onChange={handleInputChange}>
+          <select
+            name="selectedBatch"
+            value={formData.selectedBatch}
+            onChange={handleInputChange}
+          >
             <option value="">Select Batch</option>
             <option value="6-7AM">6-7AM</option>
             <option value="7-8AM">7-8AM</option>

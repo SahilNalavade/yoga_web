@@ -1,12 +1,14 @@
-// components/Form.js
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const Form = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     age: '',
     selectedBatch: '',
   });
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({
@@ -18,23 +20,41 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch('/api/submitForm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    const { name, age, selectedBatch } = formData;
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log('Form submitted successfully:', responseData);
-      } else {
-        console.error('Failed to submit form:', response.status);
+    if (!name || !age || !selectedBatch) {
+      setError('Please fill in all the fields.');
+      return;
+    }
+
+    const ageValue = parseInt(age);
+    if (isNaN(ageValue) || ageValue < 18) {
+      setError('Age should be 18 or above.');
+    } else if (ageValue > 65) {
+      setError('Age should be 65 or below.');
+    } else {
+      try {
+        const response = await fetch('/api/submitForm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log('Form submitted successfully:', responseData);
+
+          router.push('/profile');
+        } else {
+          console.error('Failed to submit form:', response.status);
+        }
+      } catch (error) {
+        console.error('Error during form submission:', error);
+      } finally {
+        setError('');
       }
-    } catch (error) {
-      console.error('Error during form submission:', error);
     }
   };
 
@@ -65,6 +85,8 @@ const Form = () => {
         <br />
         <button type="submit">Submit</button>
       </form>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };

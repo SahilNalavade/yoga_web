@@ -21,7 +21,7 @@ app.post('/submitForm', async (req, res) => {
   const formData = req.body;
 
   try {
-    await db.none('INSERT INTO yoga_registration(name, age, selected_batch, mobile,pa) VALUES($1, $2, $3, $4)', [
+    await db.none('INSERT INTO yoga_registration(name, age, selected_batch, mobile) VALUES($1, $2, $3, $4)', [
       formData.name,
       formData.age,
       formData.selectedBatch,

@@ -7,17 +7,19 @@ import {
   FormLabel,
   Select,
 } from '@chakra-ui/react';
-import Payment from './Payment';
+import Payment from './PaymentBatch';
 
 const ProfilePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
-    selectedBatch: '',
+    selectedatch: '',
     mobile: '',
     editMode: false,
- 
+
   });
+  
+  
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,33 +51,14 @@ const ProfilePage = () => {
     fetchFormData();
   }, []);
 
-  const handleBatchChange = (event) => {
-    setFormData((prevData) => ({ ...prevData, selectedBatch: event.target.value }));
-  };
-
-  const handleEditClick = () => {
-    setFormData((prevData) => ({ ...prevData, editMode: !prevData.editMode }));
-  };
-
+  
   const handleLogout = () => {
     console.log('User logged out');
     window.location.href = '/registration';
   };
 
-  const handleSaveClick = async () => {
-    console.log('Changes saved');
 
-    if (formData.selectedBatch !== formData.currentBatch) {
-      scheduleBatchChange(formData.selectedBatch);
-    }
-
-    setFormData((prevData) => ({ ...prevData, editMode: false }));
-
-  };
-
-  const scheduleBatchChange = (newBatch) => {
-    console.log(`Scheduling batch change for next month: ${newBatch}`);
-  };
+  
 
   
 
@@ -86,7 +69,7 @@ const ProfilePage = () => {
       
       {!loading && !error && (
         <>
-        <Payment />
+    
           <Text fontSize="xl" mb={4} textAlign="center">
             Yoga Registration
           </Text>
@@ -97,42 +80,21 @@ const ProfilePage = () => {
             <Text>Name: {formData.name}</Text>
             <Text>Age: {formData.age}</Text>
             <Text>Mobile: {formData.mobile}</Text>
-            <Text>Current Batch: {formData.currentBatch}</Text>
+            <Text>Current Batch: {formData.selected_batch}</Text>
           </Box>
          
           <Box mt={4}>
             <Text fontSize="lg" fontWeight="bold" mb={2}>
               Yoga Batches
             </Text>
-            {formData.editMode && (
-              <FormControl>
-                <FormLabel>Select Batch for Next Month:</FormLabel>
-                <Select
-                  id="batchSelect"
-                  value={formData.selectedBatch}
-                  onChange={handleBatchChange}
-                >
-                  {yogaBatches.map((batch, index) => (
-                    <option key={index} value={batch.time}>
-                      {batch.time}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
+          
           </Box>
-          {formData.editMode ? (
-            <Button colorScheme="teal" onClick={handleSaveClick} mt={4} isDisabled={!formData.selectedBatch}>
-              Save
-            </Button>
-          ) : (
-            <Button colorScheme="blue" onClick={handleEditClick} mt={4}>
-              Edit
-            </Button>
-          )}
+          <Payment />
+        
           <Button colorScheme="red" onClick={handleLogout} mt={4}>
             Logout
           </Button>
+
         </>
       )}
     </Box>

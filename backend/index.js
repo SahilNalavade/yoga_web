@@ -15,13 +15,13 @@ const db = pgp({
 });
 
 
-const app = express();
+const index = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors());
-app.use(bodyParser.json());
+index.use(cors());
+index.use(bodyParser.json());
 
-app.post('/submitForm', async (req, res) => {
+index.post('/submitForm', async (req, res) => {
   const formData = req.body;
 
   try {
@@ -49,6 +49,6 @@ app.post('/submitForm', async (req, res) => {
 
 
 
-app.listen(port, () => {
+index.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
 });

@@ -14,17 +14,11 @@ const db = pgp({
   },
 });
 
+
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Configure CORS to allow requests from your frontend domain
-const corsOptions = {
-  origin: 'yoga-web-omega.vercel.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // enable set cookie
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/submitForm', async (req, res) => {
@@ -52,6 +46,8 @@ app.post('/submitForm', async (req, res) => {
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });
+
+
 
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);

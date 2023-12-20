@@ -8,10 +8,12 @@ const port = process.env.PORT || 3002;
 const db = pgp({
   user: 'postgres',
   password: 'Admin0272',
-  host: 'localhost',
+  host: 'database-3.cb86aoug6oz9.us-east-1.rds.amazonaws.com',
   port: 5432,
-  database: 'initial_db',
+  database: 'demo',
+  ssl: true,
 });
+
 
 app.use(express.json());
 

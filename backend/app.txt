@@ -49,3 +49,26 @@ app.post('/submitForm', async (req, res) => {
 app.listen(port, () => {
   console.log(`Backend server is running on port ${port}`);
 });
+
+
+
+import React from 'react';
+import { useRouter } from 'next/router';
+
+const ProfilePage = () => {
+  const router = useRouter();
+  const { name, age, selectedBatch, mobile } = router.query;
+
+  return (
+    <div>
+      <h1>User Profile</h1>
+      <p>Name: {name}</p>
+      <p>Age: {age}</p>
+      <p>Selected Batch: {selectedBatch}</p>
+      <p>Mobile: {mobile}</p>
+      {/* Add other profile information as needed */}
+    </div>
+  );
+};
+
+export default ProfilePage;

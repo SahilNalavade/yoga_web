@@ -5,11 +5,15 @@ const pgp = require('pg-promise')();
 
 const db = pgp({
   user: 'postgres',
-  password: 'Admin0272', 
-  host: 'localhost', 
-  port: 5432, 
-  database: 'initial_db',
+  password: 'Admin0272',
+  host: 'database-3.cb86aoug6oz9.us-east-1.rds.amazonaws.com',
+  port: 5432,
+  database: 'demo',
+  ssl: {
+    rejectUnauthorized: false, // Bypass self-signed certificate validation
+  },
 });
+
 
 const app = express();
 const port = process.env.PORT || 3001;

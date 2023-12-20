@@ -98,7 +98,10 @@ const Form = () => {
           position: 'top-right',
         });
 
-        router.push('/profile');
+        router.push({
+          pathname: '/profile',
+          query: formData,
+        });
       } else {
         console.error('Failed to submit form:', response.status);
       }

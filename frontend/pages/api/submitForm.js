@@ -1,4 +1,4 @@
-const backendUrl = 'https://yoga-web-omega.vercel.app/submitForm'; // Assuming /api/submitForm is your backend endpoint
+const backendUrl = 'http://localhost:3001/submitForm';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {

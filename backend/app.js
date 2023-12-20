@@ -19,7 +19,7 @@ const port = process.env.PORT || 3001;
 
 // Configure CORS to allow requests from your frontend domain
 const corsOptions = {
-  origin: 'https://yoga-web-wnri.vercel.app',
+  origin: 'yoga-web-omega.vercel.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // enable set cookie
 };

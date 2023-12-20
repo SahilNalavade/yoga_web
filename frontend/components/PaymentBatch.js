@@ -88,7 +88,7 @@ const PaymentBatch = () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
   
       // Send data to the backend
-      const backendUrl = 'https://yoga-web-one.vercel.app/submitForm';
+      const backendUrl = 'http://localhost:3001/submitForm';
       const backendResponse = await fetch(backendUrl, {
         method: 'POST',
         headers: {
